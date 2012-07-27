@@ -1,0 +1,4 @@
+name: OakQuests
+main: com.ignoreourgirth.gary.oakquests.OakQuests
+version: 1.0
+depend: [OakCoreLib]
