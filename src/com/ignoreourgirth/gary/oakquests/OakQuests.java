@@ -16,8 +16,6 @@
  ******************************************************************************/
 package com.ignoreourgirth.gary.oakquests;
 
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -26,10 +24,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.ignoreourgirth.gary.oakcorelib.CommandPreprocessor;
+import com.ignoreourgirth.gary.oakcorelib.DisplayItems;
+import com.ignoreourgirth.gary.oakcorelib.ProximityDetection;
 
 public class OakQuests extends JavaPlugin {
-
-	public static HashSet<KeyItemEntity> activeItems;
 	
 	public static final String usageMessage = ChatColor.AQUA + "Usage: /quest [ask/accept/deny/drop/finish/list/info]";
 	public static final String invalidIDMessage = ChatColor.GRAY + "Invalid quest ID. Use '/quest list' to get ID.";
@@ -46,20 +44,17 @@ public class OakQuests extends JavaPlugin {
 		log = this.getLogger();
 		plugin = this;
 		server = this.getServer();
-        activeItems = new HashSet<KeyItemEntity>();
         keyItems = new KeyItems();
         loader = new QuestLoader();
         OakQuests.server.getPluginManager().registerEvents(loader, plugin);
         OakQuests.server.getPluginManager().registerEvents(keyItems, plugin);
         CommandPreprocessor.addExecutor(new Commands());
-		log.info("OakQuests enabled.");  
 	}
 	
 	public void onDisable() {
 		loader.unloadQuests();
-		Iterator<KeyItemEntity> activeItemIterator = activeItems.iterator();
-		while (activeItemIterator.hasNext()) activeItemIterator.next().dispose();
-		log.info("OakQuests disabled.");
+		DisplayItems.removeAll(this);
+		ProximityDetection.removeAll(this);
 	}
 	
 }

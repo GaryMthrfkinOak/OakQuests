@@ -19,11 +19,12 @@ package com.ignoreourgirth.gary.oakquests.baseclass;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
@@ -34,8 +35,8 @@ import com.ignoreourgirth.gary.oakquests.events.QuestDroppedEvent;
 
 public abstract class Quest implements Listener  {
 
-	private HashSet<Player> activePlayers;
-	private Hashtable<Player, Integer> questStages;
+	private HashSet<String> activePlayers;
+	private HashMap<String, Integer> questStages;
 	
 	protected String questTitle;
 	protected String questNPC;
@@ -49,8 +50,8 @@ public abstract class Quest implements Listener  {
 	
 	protected Location waypoint = null;
 	
-	protected boolean isOnQuest(Player player) {return activePlayers.contains(player); }
-	protected int getQuestStage(Player player) {return questStages.get(player); }
+	protected boolean isOnQuest(OfflinePlayer player) {return activePlayers.contains(player.getName()); }
+	protected int getQuestStage(OfflinePlayer player) {return questStages.get(player.getName()); }
 	
 	protected abstract void initialize();
 	protected abstract void postInitialize();
@@ -70,8 +71,8 @@ public abstract class Quest implements Listener  {
 	public String getID() {return questID;}
 
 	public Quest() {
-		activePlayers = new HashSet<Player>();
-		questStages = new Hashtable<Player, Integer>();
+		activePlayers = new HashSet<String>();
+		questStages = new HashMap<String, Integer>();
 		questID = "";
 	}
 	
@@ -86,11 +87,9 @@ public abstract class Quest implements Listener  {
 			statement.setString(1, questID);
 			ResultSet result = statement.executeQuery();
 			while (result.next()) {
-				Player nextPlayer = OakQuests.server.getPlayerExact(result.getString(1));
-				if (nextPlayer != null) {
-					activePlayers.add(nextPlayer);
-					questStages.put(nextPlayer , result.getInt(2));
-				}
+				OfflinePlayer nextPlayer = OakQuests.server.getOfflinePlayer(result.getString(1));
+				activePlayers.add(nextPlayer.getName());
+				questStages.put(nextPlayer.getName() , result.getInt(2));
 			}
 		} catch (SQLException e) {
 			OakQuests.log.log(Level.SEVERE, e.getMessage());
@@ -100,15 +99,15 @@ public abstract class Quest implements Listener  {
 	
 	public void addActivePlayer(Player player, int stage) {
 		if (!isOnQuest(player)) {
-			activePlayers.add(player);
-			questStages.put(player, stage);
+			activePlayers.add(player.getName());
+			questStages.put(player.getName(), stage);
 		}
 	}
 	
 	public void removeActivePlayer(Player player) {
 		if (isOnQuest(player)) {
-			activePlayers.remove(player);
-			questStages.remove(player);
+			activePlayers.remove(player.getName());
+			questStages.remove(player.getName());
 		}
 	}
 	
@@ -146,8 +145,8 @@ public abstract class Quest implements Listener  {
 				return;
 			}
 			accepted(player);
-			activePlayers.add(player);
-			questStages.put(player, 1);
+			activePlayers.add(player.getName());
+			questStages.put(player.getName(), 1);
 			player.sendMessage(ChatColor.GOLD + "Started Quest: " + questTitle);
 			try {
 				PreparedStatement statement = OakCoreLib.getDB().prepareStatement("INSERT INTO oakquests_active (questID, player, stage) VALUES (?, ?, ?)");
@@ -183,8 +182,8 @@ public abstract class Quest implements Listener  {
 	public void dropQuest(Player player) {
 		if (isOnQuest(player)) {
 			if (isAbandonable) {
-				activePlayers.remove(player);
-				questStages.remove(player);
+				activePlayers.remove(player.getName());
+				questStages.remove(player.getName());
 				dropped(player);
 				player.sendMessage(ChatColor.GRAY + "Dropped Quest: " + questTitle);
 				try {
@@ -208,8 +207,8 @@ public abstract class Quest implements Listener  {
 	public void finishQuest(Player player) {
 		if (isOnQuest(player)) {
 			if (turnIn(player)) {
-				activePlayers.remove(player);
-				questStages.remove(player);
+				activePlayers.remove(player.getName());
+				questStages.remove(player.getName());
 				player.sendMessage(ChatColor.GOLD + "Finished Quest: " + questTitle);
 				try {
 					PreparedStatement statement = OakCoreLib.getDB().prepareStatement("DELETE FROM oakquests_active WHERE questID=? AND player=?");

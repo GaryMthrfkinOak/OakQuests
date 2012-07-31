@@ -19,12 +19,12 @@ package com.ignoreourgirth.gary.oakquests.quests;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 
 import com.ignoreourgirth.gary.oakquests.CommonRewards;
 import com.ignoreourgirth.gary.oakquests.GeneralUtils;
-import com.ignoreourgirth.gary.oakquests.KeyItemEntity;
 import com.ignoreourgirth.gary.oakquests.MagicUtils;
 import com.ignoreourgirth.gary.oakquests.OakQuests;
 import com.ignoreourgirth.gary.oakquests.baseclass.Quest;
@@ -51,10 +51,10 @@ public class TheHermetPart1 extends Quest {
 
 	@Override
 	protected void postInitialize() {
-		for (Player player : OakQuests.server.getOnlinePlayers()) {
+		for (OfflinePlayer player : OakQuests.server.getOfflinePlayers()) {
 			if (isOnQuest(player)) {
 				if ((OakQuests.keyItems.getItemCount(player, orbItemName) == 0)) {
-					new KeyItemEntity(this, player, orbLocation, orbItemName, Material.MAGMA_CREAM);
+					OakQuests.keyItems.spawnDisplayItem(orbLocation, orbItemName, Material.MAGMA_CREAM, player);
 				}
 			}
 		}
@@ -88,7 +88,7 @@ public class TheHermetPart1 extends Quest {
 			MagicUtils.teachSpell(questNPC, player, recallID, 1);
 		}
 		MagicUtils.setRecallLocation(player, hermetLocation);
-		new KeyItemEntity(this, player, orbLocation, orbItemName, Material.MAGMA_CREAM);
+		OakQuests.keyItems.spawnDisplayItem(orbLocation, orbItemName, Material.MAGMA_CREAM, player);
 	}
 
 	@Override

@@ -23,6 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -33,7 +34,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 import com.ignoreourgirth.gary.oakquests.CommonRewards;
 import com.ignoreourgirth.gary.oakquests.GeneralUtils;
-import com.ignoreourgirth.gary.oakquests.KeyItemEntity;
 import com.ignoreourgirth.gary.oakquests.MagicUtils;
 import com.ignoreourgirth.gary.oakquests.OakQuests;
 import com.ignoreourgirth.gary.oakquests.baseclass.Quest;
@@ -66,10 +66,10 @@ public class TheHermetPart2 extends Quest {
 
 	@Override
 	protected void postInitialize() {
-		for (Player player : OakQuests.server.getOnlinePlayers()) {
+		for (OfflinePlayer player : OakQuests.server.getOfflinePlayers()) {
 			if (isOnQuest(player)) {
 				if ((OakQuests.keyItems.getItemCount(player, orbItemName) == 0)) {
-					new KeyItemEntity(this, player, orbLocation, orbItemName, Material.MAGMA_CREAM);
+					OakQuests.keyItems.spawnDisplayItem(orbLocation, orbItemName, Material.MAGMA_CREAM, player);
 				}
 			}
 		}
@@ -96,7 +96,7 @@ public class TheHermetPart2 extends Quest {
 		GeneralUtils.sendFromNPC(player, questNPC,  "Svist une ist close.");
 		GeneralUtils.setWaypoint(player, waypointLocation);
 		MagicUtils.setRecallLocation(player, hermetLocation);
-		new KeyItemEntity(this, player, orbLocation, orbItemName, Material.MAGMA_CREAM);
+		OakQuests.keyItems.spawnDisplayItem(orbLocation, orbItemName, Material.MAGMA_CREAM, player);
 	}
 
 	@Override
@@ -167,7 +167,7 @@ public class TheHermetPart2 extends Quest {
 			if (isOnQuest(player)) {
 				if (OakQuests.keyItems.getItemCount(player, orbItemName) > 0) {
 					OakQuests.keyItems.removeItemType(player, orbItemName);
-					new KeyItemEntity(this, player, orbLocation, orbItemName, Material.MAGMA_CREAM);
+					OakQuests.keyItems.spawnDisplayItem(orbLocation, orbItemName, Material.MAGMA_CREAM, player);
 				}
 			}
 		}

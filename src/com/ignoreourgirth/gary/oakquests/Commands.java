@@ -162,7 +162,7 @@ public class Commands {
 	public void keyItemCommand(Player player){
 		player.sendMessage(ChatColor.GRAY + "---- Key Items ---- ");
 		int iteration = 0;
-		for (Map.Entry<String, Integer> entry : KeyItems.itemTables.get(player).entrySet()) {
+		for (Map.Entry<String, Integer> entry : KeyItems.itemTables.get(player.getName()).entrySet()) {
 			iteration ++;
 			player.sendMessage(ChatColor.GRAY + (iteration + ". ") + ChatColor.GOLD + entry.getKey() + ChatColor.WHITE + " (" + entry.getValue() + ")");
 		}
