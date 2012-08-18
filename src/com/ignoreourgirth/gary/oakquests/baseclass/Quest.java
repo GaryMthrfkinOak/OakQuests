@@ -35,7 +35,7 @@ import com.ignoreourgirth.gary.oakquests.events.QuestDroppedEvent;
 
 public abstract class Quest implements Listener  {
 
-	private HashSet<String> activePlayers;
+	protected HashSet<String> activePlayers;
 	private HashMap<String, Integer> questStages;
 	
 	protected String questTitle;

@@ -45,7 +45,7 @@ public class ArchersAnonymous1 extends Quest {
 	public void initialize() {
 		questID = "Archer1";
 		questTitle = "Archers Anonymous I";
-		questNPC = "HeterosexualElve";
+		questNPC = "Hetero Elve";
 		isRepeatable = false;
 		unavailibleMessage = null;
 		notRepeatbleMessage = null;

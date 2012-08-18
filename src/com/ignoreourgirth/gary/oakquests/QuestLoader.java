@@ -42,6 +42,7 @@ import com.ignoreourgirth.gary.oakquests.baseclass.Quest;
 import com.ignoreourgirth.gary.oakquests.quests.ArchersAnonymous1;
 import com.ignoreourgirth.gary.oakquests.quests.ArchersAnonymous2;
 import com.ignoreourgirth.gary.oakquests.quests.ArchersAnonymous3;
+import com.ignoreourgirth.gary.oakquests.quests.Exploration1;
 import com.ignoreourgirth.gary.oakquests.quests.TheHermetPart1;
 import com.ignoreourgirth.gary.oakquests.quests.ScandiumRepeatable;
 import com.ignoreourgirth.gary.oakquests.quests.LavaLava;
@@ -79,6 +80,7 @@ public class QuestLoader implements Listener {
 		activeClasses.add(ArchersAnonymous1.class);
 		activeClasses.add(ArchersAnonymous2.class);
 		activeClasses.add(ArchersAnonymous3.class);
+		activeClasses.add(Exploration1.class);
 	}
 	
 	private void loadQuests() {
@@ -163,7 +165,7 @@ public class QuestLoader implements Listener {
 		{
 		    if (entity instanceof HumanEntity) {
 		    	for (String NPCName : npcNames) {
-		    		if (((HumanEntity) entity).getName().equalsIgnoreCase(NPCName)) return questByNPCName.get(NPCName);
+		    		if (((HumanEntity) entity).getName().substring(2).equalsIgnoreCase(NPCName)) return questByNPCName.get(NPCName);
 		    	}
 		    }
 		    	

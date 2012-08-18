@@ -31,7 +31,7 @@ import com.ignoreourgirth.gary.oakquests.baseclass.Quest;
 
 public class ScandiumRepeatable extends Quest {
 
-	private final int oreNeeded = 25;
+	private final int oreNeeded = 30;
 	private final double oreDropRate = 0.02D;
 	private final String keyItemName = "Thortveitite Ore";
 	
